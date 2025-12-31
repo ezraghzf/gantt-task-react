@@ -6,6 +6,7 @@ export enum ViewMode {
   /** ISO-8601 week */
   Week = "Week",
   Month = "Month",
+  WeeklyMonth = "WeeklyMonth",
   QuarterYear = "QuarterYear",
   Year = "Year",
 }
@@ -87,6 +88,7 @@ export interface DisplayOption {
 
 export interface StylingOption {
   headerHeight?: number;
+  headerBordered?:boolean;
   columnWidth?: number;
   listCellWidth?: string;
   rowHeight?: number;

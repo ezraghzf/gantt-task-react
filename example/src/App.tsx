@@ -16,6 +16,8 @@ const App = () => {
     columnWidth = 300;
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
+  } else if (view === ViewMode.WeeklyMonth) {
+    columnWidth = 250;
   }
 
   const handleTaskChange = (task: Task) => {
@@ -87,6 +89,7 @@ const App = () => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
+        // headerBordered={true}
       />
       <h3>Gantt With Limited Height</h3>
       <Gantt

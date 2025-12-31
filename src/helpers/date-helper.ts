@@ -104,6 +104,7 @@ export const ganttDateRange = (
       newEndDate = startOfDate(newEndDate, "year");
       break;
     case ViewMode.Week:
+    case ViewMode.WeeklyMonth:
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(
         getMonday(newStartDate),
@@ -160,6 +161,7 @@ export const seedDates = (
         currentDate = addToDate(currentDate, 1, "month");
         break;
       case ViewMode.Week:
+      case ViewMode.WeeklyMonth:
         currentDate = addToDate(currentDate, 7, "day");
         break;
       case ViewMode.Day:
@@ -210,10 +212,18 @@ export const getLocalDayOfWeek = (
  * Returns monday of current week
  * @param date date for modify
  */
-const getMonday = (date: Date) => {
+export const getMonday = (date: Date) => {
   const day = date.getDay();
   const diff = date.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
   return new Date(date.setDate(diff));
+};
+
+export const getWeekNumberFromDate = (date: Date, startDate: Date) => {
+  const start = getMonday(new Date(startDate));
+  const current = getMonday(new Date(date));
+  const diffTime = current.getTime() - start.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.floor(diffDays / 7) + 1;
 };
 
 export const getWeekNumberISO8601 = (date: Date) => {
@@ -238,4 +248,8 @@ export const getWeekNumberISO8601 = (date: Date) => {
 
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month + 1, 0).getDate();
+};
+
+export const getWeekNumberInMonth = (date: Date) => {
+  return Math.ceil((date.getDate() + 6 - date.getDay()) / 7);
 };

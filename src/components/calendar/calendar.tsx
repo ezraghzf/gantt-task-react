@@ -2,11 +2,14 @@ import React, { ReactChild } from "react";
 import { ViewMode } from "../../types/public-types";
 import { TopPartOfCalendar } from "./top-part-of-calendar";
 import {
+  addToDate,
   getCachedDateTimeFormat,
   getDaysInMonth,
   getLocalDayOfWeek,
   getLocaleMonth,
   getWeekNumberISO8601,
+  getWeekNumberInMonth,
+  getWeekNumberFromDate,
 } from "../../helpers/date-helper";
 import { DateSetup } from "../../types/date-setup";
 import styles from "./calendar.module.css";
@@ -20,6 +23,8 @@ export type CalendarProps = {
   columnWidth: number;
   fontFamily: string;
   fontSize: string;
+  headerBordered?: boolean;
+  startDate?: Date;
 };
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -31,6 +36,8 @@ export const Calendar: React.FC<CalendarProps> = ({
   columnWidth,
   fontFamily,
   fontSize,
+  startDate,
+  // headerBordered
 }) => {
   const getCalendarValuesForYear = () => {
     const topValues: ReactChild[] = [];
@@ -68,7 +75,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={headerHeight}
             xText={xText}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.7}
           />
         );
       }
@@ -113,7 +120,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={Math.abs(xText)}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.7}
           />
         );
       }
@@ -157,7 +164,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={xText}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.7}
           />
         );
       }
@@ -203,13 +210,91 @@ export const Calendar: React.FC<CalendarProps> = ({
               y1Line={0}
               y2Line={topDefaultHeight}
               xText={columnWidth * i + columnWidth * weeksCount * 0.5}
-              yText={topDefaultHeight * 0.9}
+              yText={topDefaultHeight * 0.7}
             />
           );
         }
         weeksCount = 0;
       }
       weeksCount++;
+    }
+    return [topValues, bottomValues];
+  };
+
+  const getCalendarValuesForWeeklyMonth = () => {
+    const topValues: ReactChild[] = [];
+    const bottomValues: ReactChild[] = [];
+    let weeksCount: number = 0;
+    const topDefaultHeight = headerHeight * 0.5;
+    const dates = dateSetup.dates;
+    for (let i = 0; i < dates.length; i++) {
+      const date = dates[i];
+      // bottom
+      const nextDate = dates[i + 1] || addToDate(date, 7, "day");
+      const endDayDate = new Date(nextDate);
+      endDayDate.setDate(nextDate.getDate() - 1);
+      const weekNumber = startDate 
+        ? getWeekNumberFromDate(date, startDate) 
+        : getWeekNumberInMonth(date);
+        
+      bottomValues.push(
+        <g key={date.getTime()}>
+          <line
+            x1={columnWidth * i}
+            y1={headerHeight * 0.5}
+            x2={columnWidth * i}
+            y2={headerHeight}
+            className={styles.calendarTopTick}
+          />
+          <text
+            y={headerHeight * 0.7}
+            x={columnWidth * i + columnWidth * 0.5}
+            className={styles.calendarBottomText}
+          >
+            {`W${weekNumber}`}
+          </text>
+          <text
+            y={headerHeight * 0.9}
+            x={columnWidth * i + columnWidth * 0.5}
+            className={styles.calendarBottomText}
+          >
+            {`${date.getDate()}-${endDayDate.getDate()}`}
+          </text>
+        </g>
+      );
+
+      if (i !== 0 && date.getMonth() !== dates[i - 1].getMonth()) {
+        const displayDate = dates[i - 1];
+        const topValue = `${getLocaleMonth(displayDate, locale)}, ${displayDate.getFullYear()}`;
+        topValues.push(
+          <TopPartOfCalendar
+            key={topValue}
+            value={topValue}
+            x1Line={columnWidth * i}
+            y1Line={0}
+            y2Line={topDefaultHeight}
+            xText={columnWidth * (i - weeksCount * 0.5)}
+            yText={topDefaultHeight * 0.7}
+          />
+        );
+        weeksCount = 0;
+      }
+      weeksCount++;
+    }
+    if (dates.length > 0) {
+      const displayDate = dates[dates.length - 1];
+      const topValue = `${getLocaleMonth(displayDate, locale)}, ${displayDate.getFullYear()}`;
+      topValues.push(
+        <TopPartOfCalendar
+          key={topValue}
+          value={topValue}
+          x1Line={columnWidth * dates.length}
+          y1Line={0}
+          y2Line={topDefaultHeight}
+          xText={columnWidth * (dates.length - weeksCount * 0.5)}
+          yText={topDefaultHeight * 0.7}
+        />
+      );
     }
     return [topValues, bottomValues];
   };
@@ -254,7 +339,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                 columnWidth *
                 0.5
             }
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.7}
           />
         );
       }
@@ -299,7 +384,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={columnWidth * i + ticks * columnWidth * 0.5}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.7}
           />
         );
       }
@@ -346,7 +431,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={columnWidth * (i + topPosition)}
-            yText={topDefaultHeight * 0.9}
+            yText={topDefaultHeight * 0.7}
           />
         );
       }
@@ -370,6 +455,9 @@ export const Calendar: React.FC<CalendarProps> = ({
     case ViewMode.Week:
       [topValues, bottomValues] = getCalendarValuesForWeek();
       break;
+    case ViewMode.WeeklyMonth:
+      [topValues, bottomValues] = getCalendarValuesForWeeklyMonth();
+      break;
     case ViewMode.Day:
       [topValues, bottomValues] = getCalendarValuesForDay();
       break;
@@ -390,6 +478,14 @@ export const Calendar: React.FC<CalendarProps> = ({
         className={styles.calendarHeader}
       />
       {bottomValues} {topValues}
+      <line
+        x1={0}
+        y1={headerHeight * 0.5}
+        x2={columnWidth * dateSetup.dates.length}
+        y2={headerHeight * 0.5}
+        className={styles.calendarTopTick}
+      />
+     
     </g>
   );
 };

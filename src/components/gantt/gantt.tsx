@@ -26,7 +26,7 @@ import styles from "./gantt.module.css";
 
 export const Gantt: React.FunctionComponent<GanttProps> = ({
   tasks,
-  headerHeight = 50,
+  headerHeight = 80,
   columnWidth = 60,
   listCellWidth = "155px",
   rowHeight = 50,
@@ -387,6 +387,16 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       onExpanderClick({ ...task, hideChildren: !task.hideChildren });
     }
   };
+
+  const minStartDate = useMemo(() => {
+    if (tasks.length === 0) return new Date();
+    let min = tasks[0].start;
+    for (const t of tasks) {
+      if (t.start < min) min = t.start;
+    }
+    return min;
+  }, [tasks]);
+
   const gridProps: GridProps = {
     columnWidth,
     svgWidth,
@@ -405,6 +415,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     fontFamily,
     fontSize,
     rtl,
+    startDate: minStartDate,
   };
   const barProps: TaskGanttContentProps = {
     tasks: barTasks,

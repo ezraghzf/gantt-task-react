@@ -2,6 +2,7 @@ import {
   seedDates,
   addToDate,
   getWeekNumberISO8601,
+  getWeekNumberInMonth,
 } from "../helpers/date-helper";
 import { ViewMode } from "../types/public-types";
 
@@ -21,6 +22,17 @@ describe("seed date", () => {
   test("weekly", () => {
     expect(
       seedDates(new Date(2020, 5, 28), new Date(2020, 6, 19), ViewMode.Week)
+    ).toEqual([
+      new Date(2020, 5, 28),
+      new Date(2020, 6, 5),
+      new Date(2020, 6, 12),
+      new Date(2020, 6, 19),
+    ]);
+  });
+
+  test("weekly-month", () => {
+    expect(
+      seedDates(new Date(2020, 5, 28), new Date(2020, 6, 19), ViewMode.WeeklyMonth)
     ).toEqual([
       new Date(2020, 5, 28),
       new Date(2020, 6, 5),
@@ -70,4 +82,17 @@ test("get week number", () => {
   expect(getWeekNumberISO8601(new Date(2019, 11, 31))).toEqual("01");
   expect(getWeekNumberISO8601(new Date(2021, 0, 1))).toEqual("53");
   expect(getWeekNumberISO8601(new Date(2020, 6, 20))).toEqual("30");
+});
+
+test("get week number in month", () => {
+  // 1st of month -> W1
+  expect(getWeekNumberInMonth(new Date(2020, 0, 1))).toEqual(1);
+  // 7th of month -> W1
+  expect(getWeekNumberInMonth(new Date(2020, 0, 7))).toEqual(1);
+  // 8th of month -> W2
+  expect(getWeekNumberInMonth(new Date(2020, 0, 8))).toEqual(2);
+  // 28th of month -> W4
+  expect(getWeekNumberInMonth(new Date(2020, 0, 28))).toEqual(4);
+  // 29th of month -> W5
+  expect(getWeekNumberInMonth(new Date(2020, 0, 29))).toEqual(5);
 });
