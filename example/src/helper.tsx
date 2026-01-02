@@ -74,6 +74,18 @@ export function initTasks() {
       displayOrder: 6,
     },
     {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 12),
+      name: "Developing with baseline",
+      id: "Task 11",
+      type: "task",
+      progress: 40,
+      baselineStart: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+      baselineEnd: new Date(currentDate.getFullYear(), currentDate.getMonth(), 13),
+      project: "ProjectSample",
+      displayOrder: 7,
+    },
+    {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
       name: "Release",

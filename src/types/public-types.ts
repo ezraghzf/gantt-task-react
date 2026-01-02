@@ -18,6 +18,14 @@ export interface Task {
   start: Date;
   end: Date;
   /**
+   * Optional baseline start date
+   */
+  baselineStart?: Date;
+  /**
+   * Optional baseline end date
+   */
+  baselineEnd?: Date;
+  /**
    * From 0 to 100
    */
   progress: number;
@@ -106,6 +114,7 @@ export interface StylingOption {
   barProgressSelectedColor?: string;
   barBackgroundColor?: string;
   barBackgroundSelectedColor?: string;
+  baselineBackgroundColor?: string;
   projectProgressColor?: string;
   projectProgressSelectedColor?: string;
   projectBackgroundColor?: string;

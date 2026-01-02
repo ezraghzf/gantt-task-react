@@ -89,6 +89,7 @@ const App = () => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
+        baselineBackgroundColor="#e0e0e0"
         // headerBordered={true}
       />
       <h3>Gantt With Limited Height</h3>
@@ -105,6 +106,7 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         ganttHeight={300}
         columnWidth={columnWidth}
+        baselineBackgroundColor="#e0e0e0"
       />
     </div>
   );

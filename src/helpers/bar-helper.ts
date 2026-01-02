@@ -20,7 +20,8 @@ export const convertToBarTasks = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  baselineBackgroundColor: string
 ) => {
   let barTasks = tasks.map((t, i) => {
     return convertToBarTask(
@@ -42,7 +43,8 @@ export const convertToBarTasks = (
       projectBackgroundColor,
       projectBackgroundSelectedColor,
       milestoneBackgroundColor,
-      milestoneBackgroundSelectedColor
+      milestoneBackgroundSelectedColor,
+      baselineBackgroundColor
     );
   });
 
@@ -80,7 +82,8 @@ const convertToBarTask = (
   projectBackgroundColor: string,
   projectBackgroundSelectedColor: string,
   milestoneBackgroundColor: string,
-  milestoneBackgroundSelectedColor: string
+  milestoneBackgroundSelectedColor: string,
+  baselineBackgroundColor: string
 ): BarTask => {
   let barTask: BarTask;
   switch (task.type) {
@@ -112,7 +115,8 @@ const convertToBarTask = (
         projectProgressColor,
         projectProgressSelectedColor,
         projectBackgroundColor,
-        projectBackgroundSelectedColor
+        projectBackgroundSelectedColor,
+        baselineBackgroundColor
       );
       break;
     default:
@@ -129,7 +133,8 @@ const convertToBarTask = (
         barProgressColor,
         barProgressSelectedColor,
         barBackgroundColor,
-        barBackgroundSelectedColor
+        barBackgroundSelectedColor,
+        baselineBackgroundColor
       );
       break;
   }
@@ -149,7 +154,8 @@ const convertToBar = (
   barProgressColor: string,
   barProgressSelectedColor: string,
   barBackgroundColor: string,
-  barBackgroundSelectedColor: string
+  barBackgroundSelectedColor: string,
+  baselineBackgroundColor: string
 ): BarTask => {
   let x1: number;
   let x2: number;
@@ -160,6 +166,19 @@ const convertToBar = (
     x1 = taskXCoordinate(task.start, dates, columnWidth);
     x2 = taskXCoordinate(task.end, dates, columnWidth);
   }
+
+  let baselineX1: number | undefined;
+  let baselineX2: number | undefined;
+  if (task.baselineStart && task.baselineEnd) {
+    if (rtl) {
+      baselineX2 = taskXCoordinateRTL(task.baselineStart, dates, columnWidth);
+      baselineX1 = taskXCoordinateRTL(task.baselineEnd, dates, columnWidth);
+    } else {
+      baselineX1 = taskXCoordinate(task.baselineStart, dates, columnWidth);
+      baselineX2 = taskXCoordinate(task.baselineEnd, dates, columnWidth);
+    }
+  }
+
   let typeInternal: TaskTypeInternal = task.type;
   if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
     typeInternal = "smalltask";
@@ -180,6 +199,7 @@ const convertToBar = (
     backgroundSelectedColor: barBackgroundSelectedColor,
     progressColor: barProgressColor,
     progressSelectedColor: barProgressSelectedColor,
+    baselineBackgroundColor,
     ...task.styles,
   };
   return {
@@ -197,6 +217,8 @@ const convertToBar = (
     height: taskHeight,
     barChildren: [],
     styles,
+    baselineX1,
+    baselineX2,
   };
 };
 
