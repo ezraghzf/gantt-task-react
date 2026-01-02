@@ -110,6 +110,7 @@ npm start
 | barProgressSelectedColor   | string | Specifies the taskbar progress fill color globally on select.                                  |
 | barBackgroundColor         | string | Specifies the taskbar background fill color globally.                                          |
 | barBackgroundSelectedColor | string | Specifies the taskbar background fill color globally on select.                                |
+| baselineBackgroundColor    | string | Specifies the baseline bar fill color globally.                                                |
 | arrowColor                 | string | Specifies the relationship arrow fill color.                                                   |
 | arrowIndent                | number | Specifies the relationship arrow right indent. Sets in px                                      |
 | todayColor                 | string | Specifies the current period column fill color.                                                |
@@ -130,6 +131,8 @@ npm start
 | type\*         | string   | Task display type: **task**, **milestone**, **project**                                               |
 | start\*        | Date     | Task start date.                                                                                      |
 | end\*          | Date     | Task end date.                                                                                        |
+| baselineStart  | Date     | Task baseline start date.                                                                             |
+| baselineEnd    | Date     | Task baseline end date.                                                                               |
 | progress\*     | number   | Task progress. Sets in percent from 0 to 100.                                                         |
 | dependencies   | string[] | Specifies the parent dependencies ids.                                                                |
 | styles         | object   | Specifies the taskbar styling settings locally. Object is passed with the following attributes:       |
