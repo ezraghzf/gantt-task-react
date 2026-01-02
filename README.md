@@ -1,4 +1,4 @@
-# gantt-task-react
+# @ezraghzf/gantt-task-react
 
 ## Interactive Gantt Chart for React with TypeScript.
 
@@ -9,14 +9,14 @@
 ## Install
 
 ```
-npm install gantt-task-react
+npm install @ezraghzf/gantt-task-react
 ```
 
 ## How to use it
 
 ```javascript
-import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
-import "gantt-task-react/dist/index.css";
+import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from '@ezraghzf/gantt-task-react';
+import "@ezraghzf/gantt-task-react/dist/index.css";
 
 let tasks: Task[] = [
     {
