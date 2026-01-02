@@ -11,31 +11,48 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
     : task.styles.progressColor;
   const projectWith = task.x2 - task.x1;
 
+  const hasBaseline =
+    task.baselineX1 !== undefined && task.baselineX2 !== undefined;
+  const mainBarHeight = hasBaseline ? task.height * 0.6 : task.height;
+  const baselineHeight = task.height * 0.3;
+  const baselineY = task.y + mainBarHeight + task.height * 0.1;
+
   const projectLeftTriangle = [
     task.x1,
-    task.y + task.height / 2 - 1,
+    task.y + mainBarHeight / 2 - 1,
     task.x1,
-    task.y + task.height,
+    task.y + mainBarHeight,
     task.x1 + 15,
-    task.y + task.height / 2 - 1,
+    task.y + mainBarHeight / 2 - 1,
   ].join(",");
   const projectRightTriangle = [
     task.x2,
-    task.y + task.height / 2 - 1,
+    task.y + mainBarHeight / 2 - 1,
     task.x2,
-    task.y + task.height,
+    task.y + mainBarHeight,
     task.x2 - 15,
-    task.y + task.height / 2 - 1,
+    task.y + mainBarHeight / 2 - 1,
   ].join(",");
 
   return (
     <g tabIndex={0} className={styles.projectWrapper}>
+      {hasBaseline && (
+        <rect
+          x={task.baselineX1}
+          y={baselineY}
+          width={task.baselineX2! - task.baselineX1!}
+          height={baselineHeight}
+          ry={task.barCornerRadius}
+          rx={task.barCornerRadius}
+          fill={task.styles.baselineBackgroundColor}
+        />
+      )}
       <rect
         fill={barColor}
         x={task.x1}
         width={projectWith}
         y={task.y}
-        height={task.height}
+        height={mainBarHeight}
         rx={task.barCornerRadius}
         ry={task.barCornerRadius}
         className={styles.projectBackground}
@@ -44,7 +61,7 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
         x={task.progressX}
         width={task.progressWidth}
         y={task.y}
-        height={task.height}
+        height={mainBarHeight}
         ry={task.barCornerRadius}
         rx={task.barCornerRadius}
         fill={processColor}
@@ -54,7 +71,7 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
         x={task.x1}
         width={projectWith}
         y={task.y}
-        height={task.height / 2}
+        height={mainBarHeight / 2}
         rx={task.barCornerRadius}
         ry={task.barCornerRadius}
         className={styles.projectTop}

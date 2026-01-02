@@ -80,6 +80,15 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     }
   };
 
+  const getY = () => {
+    const hasBaseline =
+      task.baselineX1 !== undefined && task.baselineX2 !== undefined;
+    if (hasBaseline) {
+      return task.y + taskHeight * 0.6 * 0.5;
+    }
+    return task.y + taskHeight * 0.5;
+  };
+
   return (
     <g
       onKeyDown={e => {
@@ -110,11 +119,11 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       {taskItem}
       <text
         x={getX()}
-        y={task.y + taskHeight * 0.5}
+        y={getY()}
         className={
           isTextInside
             ? style.barLabel
-            : style.barLabel && style.barLabelOutside
+            : `${style.barLabel} ${style.barLabelOutside}`
         }
         ref={textRef}
       >
