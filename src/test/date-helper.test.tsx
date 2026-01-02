@@ -87,12 +87,12 @@ test("get week number", () => {
 test("get week number in month", () => {
   // 1st of month -> W1
   expect(getWeekNumberInMonth(new Date(2020, 0, 1))).toEqual(1);
-  // 7th of month -> W1
-  expect(getWeekNumberInMonth(new Date(2020, 0, 7))).toEqual(1);
+  // 7th of month -> W2 (Jan 1 Wed - Jan 5 Sun is W1, Jan 6 Mon starts W2)
+  expect(getWeekNumberInMonth(new Date(2020, 0, 7))).toEqual(2);
   // 8th of month -> W2
   expect(getWeekNumberInMonth(new Date(2020, 0, 8))).toEqual(2);
-  // 28th of month -> W4
-  expect(getWeekNumberInMonth(new Date(2020, 0, 28))).toEqual(4);
+  // 28th of month -> W5 (Jan 27 Mon starts W5)
+  expect(getWeekNumberInMonth(new Date(2020, 0, 28))).toEqual(5);
   // 29th of month -> W5
   expect(getWeekNumberInMonth(new Date(2020, 0, 29))).toEqual(5);
 });
