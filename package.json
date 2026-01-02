@@ -1,10 +1,16 @@
 {
-  "name": "gantt-task-react",
+  "name": "@ezraghzf/gantt-task-react",
   "version": "0.4.0",
   "description": "Interactive Gantt Chart for React with TypeScript.",
   "author": "Ezra G <ezraghzf@gmail.com>",
   "homepage": "https://github.com/ezraghzf/gantt-task-react",
   "license": "MIT",
+    "contributors": [
+    {
+      "name": "MaTeMaTuK",
+      "url": "https://github.com/MaTeMaTuK"
+    }
+  ],
   "repository": "ezraghzf/gantt-task-react",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
