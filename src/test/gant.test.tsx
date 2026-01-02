@@ -41,4 +41,22 @@ describe("gantt", () => {
     const baselineRect = container.querySelector('rect[fill="#9CA3AF"]');
     expect(baselineRect).toBeTruthy();
   });
+
+  it("renders without crashing when preStepsCount is 0", () => {
+    render(
+      <Gantt
+        preStepsCount={0}
+        tasks={[
+          {
+            start: new Date(2020, 0, 1),
+            end: new Date(2020, 2, 2),
+            name: "Task 0",
+            id: "Task 0",
+            progress: 45,
+            type: "task",
+          },
+        ]}
+      />
+    );
+  });
 });
