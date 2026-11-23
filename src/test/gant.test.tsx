@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { Gantt } from "../index";
 
 describe("gantt", () => {
@@ -38,6 +38,8 @@ describe("gantt", () => {
       />
     );
     // Check if there is a rect with the baseline color
+    // The baseline is an SVG rect; Testing Library has no semantic query for its fill.
+    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
     const baselineRect = container.querySelector('rect[fill="#9CA3AF"]');
     expect(baselineRect).toBeTruthy();
   });
@@ -57,6 +59,32 @@ describe("gantt", () => {
           },
         ]}
       />
+    );
+  });
+
+  it("renders custom task list components", async () => {
+    render(
+      <Gantt
+        tasks={[
+          {
+            start: new Date(2020, 0, 1),
+            end: new Date(2020, 2, 2),
+            name: "Custom task",
+            id: "Task 2",
+            progress: 45,
+            type: "task",
+          },
+        ]}
+        TaskListHeader={() => <div>Custom header</div>}
+        TaskListTable={({ tasks }) => (
+          <div data-testid="custom-task-list">{tasks[0]?.name}</div>
+        )}
+      />
+    );
+
+    expect(screen.getByText("Custom header")).toBeTruthy();
+    expect(await screen.findByTestId("custom-task-list")).toHaveTextContent(
+      "Custom task"
     );
   });
 });
